@@ -1,0 +1,33 @@
+name: Weather Automation
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Isse aap manually bhi run kar sakenge
+
+jobs:
+  run-weather:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run weather script
+      run: python weather.py
+
+    - name: Save log output
+      uses: actions/upload-artifact@v4
+      with:
+        name: weather-log-file
+        path: weather_log.txt
